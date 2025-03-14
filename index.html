@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sales Leaderboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="Whitelion_Logo.ico">
+</head>
+<body>
+    <!-- Input Form -->
+    <div class="input-form">
+        <h2>Enter Leaderboard Data</h2>
+        <form id="leaderboard-form">
+            <!-- Leaderboard Table Data -->
+            <div class="form-group">
+                <label>Rank 1:</label>
+                <input type="text" name="rank1" placeholder="Rank" value="1" required>
+                <input type="text" name="name1" placeholder="Name" value="John Doe" required>
+                <input type="number" name="deals1" placeholder="Deals Won" value="10" required>
+                <input type="text" name="target1" placeholder="Target Achieved" value="120%" required>
+                <input type="text" name="sales1" placeholder="Total Sales" value="₹1,87,50,000" required>
+            </div>
+            <div class="form-group">
+                <label>Rank 2:</label>
+                <input type="text" name="rank2" placeholder="Rank" value="2" required>
+                <input type="text" name="name2" placeholder="Name" value="Jane Smith" required>
+                <input type="number" name="deals2" placeholder="Deals Won" value="8" required>
+                <input type="text" name="target2" placeholder="Target Achieved" value="115%" required>
+                <input type="text" name="sales2" placeholder="Total Sales" value="₹1,65,00,000" required>
+            </div>
+            <div class="form-group">
+                <label>Rank 3:</label>
+                <input type="text" name="rank3" placeholder="Rank" value="3" required>
+                <input type="text" name="name3" placeholder="Name" value="Mark Johnson" required>
+                <input type="number" name="deals3" placeholder="Deals Won" value="5" required>
+                <input type="text" name="target3" placeholder="Target Achieved" value="110%" required>
+                <input type="text" name="sales3" placeholder="Total Sales" value="₹1,35,00,000" required>
+            </div>
+            <div class="form-group">
+                <label>Rank 4:</label>
+                <input type="text" name="rank4" placeholder="Rank" value="4" required>
+                <input type="text" name="name4" placeholder="Name" value="Emma Brown" required>
+                <input type="number" name="deals4" placeholder="Deals Won" value="3" required>
+                <input type="text" name="target4" placeholder="Target Achieved" value="105%" required>
+                <input type="text" name="sales4" placeholder="Total Sales" value="₹1,12,50,000" required>
+            </div>
+            <div class="form-group">
+                <label>Rank 5:</label>
+                <input type="text" name="rank5" placeholder="Rank" value="5" required>
+                <input type="text" name="name5" placeholder="Name" value="Alex White" required>
+                <input type="number" name="deals5" placeholder="Deals Won" value="3" required>
+                <input type="text" name="target5" placeholder="Target Achieved" value="100%" required>
+                <input type="text" name="sales5" placeholder="Total Sales" value="₹97,50,000" required>
+            </div>
+
+            <!-- Special Recognition Data -->
+            <div class="form-group">
+                <label>Deal Crusher:</label>
+                <input type="text" name="dealCrusherName" placeholder="Name" required>
+                <input type="file" name="dealCrusherImage" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label>Target Slayer:</label>
+                <input type="text" name="targetSlayerName" placeholder="Name" required>
+                <input type="file" name="targetSlayerImage" accept="image/*" required>
+            </div>
+
+            <button class="download-btn" type="submit">Generate Leaderboard</button>
+        </form>
+    </div>
+
+    <!-- Dynamic Leaderboard Container -->
+    <div id="dynamic-container" class="container" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <h1>Daily Sales Leaderboard</h1>
+            <p class="subtitle">
+                <img src="Rocket.png" alt="Rocket" class="emoji"> Top Performers of the Day! <img src="Rocket.png" alt="Rocket" class="emoji">
+            </p>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Deals Won</th>
+                    <th>Target Achieved</th>
+                    <th>Total Sales</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+
+        <!-- Special Recognition Section -->
+        <div class="special-recognition">
+            <h2>
+                <img src="Sparkles.png" alt="Sparkle" class="emoji"> SPECIAL RECOGNITION <img src="Sparkles.png" alt="Sparkle" class="emoji">
+            </h2>
+            <div class="awardees" id="awardees"></div>
+        </div>
+    </div>
+
+    <!-- Download Button -->
+    <button id="download-btn" class="download-btn">Download as JPG</button>
+
+    <script>
+        // Handle form submission and validation
+        document.getElementById('leaderboard-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+    
+            // Get form data
+            const formData = new FormData(this);
+    
+            // Convert file inputs to Base64 using Promises
+            Promise.all([
+                convertToBase64(formData.get('dealCrusherImage')),
+                convertToBase64(formData.get('targetSlayerImage'))
+            ]).then(([dealCrusherBase64, targetSlayerBase64]) => {
+                // Generate table rows
+                let tableRows = '';
+                for (let i = 1; i <= 5; i++) {
+                    tableRows += `
+                        <tr>
+                            <td>${formData.get(`rank${i}`)}</td>
+                            <td>${formData.get(`name${i}`)}</td>
+                            <td>${formData.get(`deals${i}`)}</td>
+                            <td>${formData.get(`target${i}`)}</td>
+                            <td>${formData.get(`sales${i}`)}</td>
+                        </tr>
+                    `;
+                }
+                document.getElementById('table-body').innerHTML = tableRows;
+    
+                // Generate awardees
+                const awardeesHTML = `
+                    <div class="awardee">
+                        <img src="Badge1.png" alt="Deal Crusher Badge" class="badge">
+                        <img src="${dealCrusherBase64 ? dealCrusherBase64 : 'Media 1.png'}" alt="Deal Crusher Profile" class="profile-pic">
+                        <h3>${formData.get('dealCrusherName')}</h3>
+                        <p>Deal Crusher of the day</p>
+                    </div>
+                    <div class="awardee">
+                        <img src="Badge2.png" alt="Target Slayer Badge" class="badge">
+                        <img src="${targetSlayerBase64 ? targetSlayerBase64 : 'Media 2.png'}" alt="Target Slayer Profile" class="profile-pic">
+                        <h3>${formData.get('targetSlayerName')}</h3>
+                        <p>Target Slayer of the day</p>
+                    </div>
+                `;
+                document.getElementById('awardees').innerHTML = awardeesHTML;
+    
+                // Show the dynamic container and download button
+                document.getElementById('dynamic-container').style.display = 'block';
+                document.getElementById('download-btn').style.display = 'block';
+            }).catch(err => {
+                console.error('Error converting images:', err);
+                alert('Failed to process images. Please try again.');
+            });
+        });
+    
+        // Function to convert file to Base64
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve(''); // Return empty string if no file
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+    
+        // Handle download functionality
+        document.getElementById('download-btn').addEventListener('click', function() {
+            // Temporarily hide the button during capture
+            this.style.display = 'none';
+            html2canvas(document.querySelector('.container'), {
+                backgroundColor: '#fff',
+                useCORS: true,
+                scale: 2,
+                onclone: (doc) => {
+                    const profileImages = doc.querySelectorAll('.profile-pic');
+                    profileImages.forEach(img => {
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.maxWidth = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.objectPosition = 'center';
+                    });
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0]; // e.g., "2025-03-14"
+                link.download = `Leaderboard-${dateStr}.jpg`;
+                link.click();
+                this.style.display = 'block';
+            }).catch(err => {
+                console.error('Error capturing the container:', err);
+                alert('Failed to download the image. Please try again.');
+                this.style.display = 'block';
+            });
+        });
+    
+        // Real-time form validation and button state management
+        const form = document.getElementById('leaderboard-form');
+        const generateButton = form.querySelector('button');
+        const downloadButton = document.getElementById('download-btn');
+    
+        // Initially hide the download button
+        downloadButton.style.display = 'none';
+    
+        // Check form validity on input change
+        form.addEventListener('input', () => {
+            let allFieldsFilled = true;
+    
+            // Check all required fields
+            for (let i = 1; i <= 5; i++) {
+                if (!form[`rank${i}`].value || !form[`name${i}`].value || !form[`deals${i}`].value ||
+                    !form[`target${i}`].value || !form[`sales${i}`].value) {
+                    allFieldsFilled = false;
+                    break;
+                }
+            }
+            if (!form['dealCrusherName'].value || !form['targetSlayerName'].value) {
+                allFieldsFilled = false;
+            }
+    
+            // Enable/disable generate button based on form completion
+            generateButton.disabled = !allFieldsFilled;
+        });
+    </script>
+</body>
+</html>
