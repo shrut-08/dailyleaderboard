@@ -17,7 +17,7 @@
             <!-- Leaderboard Table Data -->
             <div class="form-group">
                 <label>Rank 1:</label>
-                <input type="text" name="rank1" placeholder="Rank" value="1" required>
+                <!-- <input type="text" name="rank1" placeholder="Rank" value="1" required> -->
                 <input type="text" name="name1" placeholder="Name" value="John Doe" required>
                 <input type="number" name="deals1" placeholder="Deals Won" value="10" required>
                 <input type="text" name="target1" placeholder="Target Achieved" value="120%" required>
@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label>Rank 2:</label>
-                <input type="text" name="rank2" placeholder="Rank" value="2" required>
+                <!-- <input type="text" name="rank2" placeholder="Rank" value="2" required> -->
                 <input type="text" name="name2" placeholder="Name" value="Jane Smith" required>
                 <input type="number" name="deals2" placeholder="Deals Won" value="8" required>
                 <input type="text" name="target2" placeholder="Target Achieved" value="115%" required>
@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label>Rank 3:</label>
-                <input type="text" name="rank3" placeholder="Rank" value="3" required>
+                <!-- <input type="text" name="rank3" placeholder="Rank" value="3" required> -->
                 <input type="text" name="name3" placeholder="Name" value="Mark Johnson" required>
                 <input type="number" name="deals3" placeholder="Deals Won" value="5" required>
                 <input type="text" name="target3" placeholder="Target Achieved" value="110%" required>
@@ -41,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label>Rank 4:</label>
-                <input type="text" name="rank4" placeholder="Rank" value="4" required>
+                <!-- <input type="text" name="rank4" placeholder="Rank" value="4" required> -->
                 <input type="text" name="name4" placeholder="Name" value="Emma Brown" required>
                 <input type="number" name="deals4" placeholder="Deals Won" value="3" required>
                 <input type="text" name="target4" placeholder="Target Achieved" value="105%" required>
@@ -49,7 +49,7 @@
             </div>
             <div class="form-group">
                 <label>Rank 5:</label>
-                <input type="text" name="rank5" placeholder="Rank" value="5" required>
+                <!-- <input type="text" name="rank5" placeholder="Rank" value="5" required> -->
                 <input type="text" name="name5" placeholder="Name" value="Alex White" required>
                 <input type="number" name="deals5" placeholder="Deals Won" value="3" required>
                 <input type="text" name="target5" placeholder="Target Achieved" value="100%" required>
@@ -126,7 +126,7 @@
                 for (let i = 1; i <= 5; i++) {
                     tableRows += `
                         <tr>
-                            <td>${formData.get(`rank${i}`)}</td>
+                            <td>${(`${i}`)}</td>
                             <td>${formData.get(`name${i}`)}</td>
                             <td>${formData.get(`deals${i}`)}</td>
                             <td>${formData.get(`target${i}`)}</td>
