@@ -156,7 +156,11 @@
                 // Show the dynamic container and download button
                 document.getElementById('dynamic-container').style.display = 'block';
                 document.getElementById('download-btn').style.display = 'block';
-                }).catch(err => {
+
+                // Scroll to the center of the generated leaderboard
+                const leaderboard = document.getElementById('dynamic-container');
+                leaderboard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }).catch(err => {
                 console.error('Error converting images:', err);
                 alert('Failed to process images. Please try again.');
             });
